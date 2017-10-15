@@ -44,7 +44,7 @@ public class ResizeCommandTest {
     public void execute_invalidParameters_failure() {
         assertExecutionFailure(1280, 721, Messages.MESSAGE_INVALID_COMMAND_PARAMETERS);
     }
-    
+
     @Test
     public void equals() {
         ResizeCommand resizeFirstCommand = new ResizeCommand(1280, 720);
