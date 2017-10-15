@@ -117,7 +117,7 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_Resize() throws Exception {
+    public void parseCommand_resize() throws Exception {
         List<String> keywords = Arrays.asList("1280", "720");
         ResizeCommand command = (ResizeCommand) parser.parseCommand(
                 ResizeCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));

@@ -68,8 +68,8 @@ public class ResizeCommandTest {
     }
 
     /**
-     * Executes a {@code ResizeCommand} with the given {@code width, height}, and checks that {@code ResizeMainWindowEvent}
-     * is raised with the correct parameters.
+     * Executes a {@code ResizeCommand} with the given {@code width, height},
+     * and checks that {@code ResizeMainWindowEvent} is raised with the correct parameters.
      */
     private void assertExecutionSuccess(int width, int height) {
         ResizeCommand resizeCommand = prepareCommand(width, height);
