@@ -31,9 +31,10 @@ public class ResizeCommand extends Command {
     }
 
     @Override
-    public CommandResult execute() throws CommandException{
-        if (width > MAX_WIDTH || height > MAX_HEIGHT)
+    public CommandResult execute() throws CommandException {
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
             throw new CommandException(MESSAGE_INVALID_COMMAND_PARAMETERS);
+        }
         EventsCenter.getInstance().post(new ResizeMainWindowEvent(width, height));
         return new CommandResult(String.format(MESSAGE_SUCCESS, width, height));
     }

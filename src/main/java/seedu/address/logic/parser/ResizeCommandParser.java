@@ -28,7 +28,7 @@ public class ResizeCommandParser implements Parser<ResizeCommand> {
             throwParserException();
         }
 
-        return new ResizeCommand(width,height);
+        return new ResizeCommand(width, height);
     }
 
     private void throwParserException() throws ParseException {
