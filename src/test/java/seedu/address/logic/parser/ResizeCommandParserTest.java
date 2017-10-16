@@ -15,7 +15,8 @@ public class ResizeCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsResizeCommand() {
-        assertParseSuccess(parser, "1280 720", new ResizeCommand(1280, 720));
+        assertParseSuccess(parser, String.format("%d %d", ResizeCommand.MAX_WIDTH, ResizeCommand.MAX_HEIGHT),
+                new ResizeCommand(ResizeCommand.MAX_WIDTH, ResizeCommand.MAX_HEIGHT));
     }
 
     @Test
@@ -29,7 +30,7 @@ public class ResizeCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ResizeCommand.MESSAGE_USAGE));
 
         // invalid arguments that are out of bound
-        assertParseFailure(parser, "1280 721",
+        assertParseFailure(parser, String.format("%d %d", ResizeCommand.MAX_WIDTH + 1, ResizeCommand.MAX_HEIGHT),
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ResizeCommand.MESSAGE_USAGE));
 
 

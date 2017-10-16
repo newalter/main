@@ -36,13 +36,14 @@ public class ResizeCommandTest {
 
     @Test
     public void execute_validParameters_success() {
-        assertExecutionSuccess(1280, 720);
-        assertExecutionSuccess(1000, 600);
+        assertExecutionSuccess(ResizeCommand.MAX_WIDTH, ResizeCommand.MAX_HEIGHT);
+        assertExecutionSuccess(ResizeCommand.MAX_WIDTH - 100, ResizeCommand.MAX_HEIGHT - 100);
     }
 
     @Test
     public void execute_invalidParameters_failure() {
-        assertExecutionFailure(1280, 721, Messages.MESSAGE_INVALID_COMMAND_PARAMETERS);
+        assertExecutionFailure(ResizeCommand.MAX_WIDTH + 1, ResizeCommand.MAX_HEIGHT,
+                Messages.MESSAGE_INVALID_COMMAND_PARAMETERS);
     }
 
     @Test

@@ -2,6 +2,9 @@ package seedu.address.logic.commands;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_PARAMETERS;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.events.ui.ResizeMainWindowEvent;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -10,13 +13,13 @@ import seedu.address.logic.commands.exceptions.CommandException;
  * Resize the main window.
  */
 public class ResizeCommand extends Command {
-
-    public static final int MAX_WIDTH = 1280;
-    public static final int MAX_HEIGHT = 720;
+    public static final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final int MAX_WIDTH = dimension.width;
+    public static final int MAX_HEIGHT = dimension.height;
     public static final String COMMAND_WORD = "resize";
     public static final String COMMAND_ALIAS = "rs";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Resize the MainWindows to "
-            + "the specified WIDTH(<=1280) and HEIGHT(<=720) \n"
+            + String.format("the specified WIDTH(<=%d) and HEIGHT(<=%d) \n", MAX_WIDTH, MAX_HEIGHT)
             + "Parameters: WIDTH HEIGHT\n"
             + String.format("Example: " + COMMAND_WORD + " %d %d", MAX_WIDTH, MAX_HEIGHT);
     public static final String MESSAGE_SUCCESS = "Resize successfully to %d*%d";

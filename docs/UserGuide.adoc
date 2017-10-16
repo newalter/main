@@ -240,7 +240,7 @@ Format: `resize WIDTH HEIGHT`
 
 ****
 * Resize the MainWindows to the specified WIDTH and HEIGHT.
-* Restriction on WIDTH and HEIGHT: `WIDTH < = 1280`, `HEIGHT < = 720`
+* Restriction on WIDTH and HEIGHT: `WIDTH < = width of the screen display`, `HEIGHT < = height of the screen display`
 ****
 
 Examples:
