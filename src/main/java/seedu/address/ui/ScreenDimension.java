@@ -11,7 +11,9 @@ public class ScreenDimension {
     private static Dimension dimension;
 
     public static Dimension getDimension() {
-        if (dimension != null) { return dimension; }
+        if (dimension != null) {
+            return dimension;
+        }
         try {
             dimension = Toolkit.getDefaultToolkit().getScreenSize();
         } catch (Exception e) {
