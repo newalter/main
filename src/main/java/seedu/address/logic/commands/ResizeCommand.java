@@ -3,17 +3,17 @@ package seedu.address.logic.commands;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_PARAMETERS;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 
 import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.events.ui.ResizeMainWindowEvent;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.ui.ScreenDimension;
 
 /**
  * Resize the main window.
  */
 public class ResizeCommand extends Command {
-    public static final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final Dimension dimension = ScreenDimension.getDimension();
     public static final int MAX_WIDTH = dimension.width;
     public static final int MAX_HEIGHT = dimension.height;
     public static final String COMMAND_WORD = "resize";
