@@ -119,8 +119,8 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_resize() throws Exception {
         ResizeCommand command = (ResizeCommand) parser.parseCommand(
-                ResizeCommand.COMMAND_WORD +
-                        String.format(" %d %d", ResizeCommand.MAX_WIDTH, ResizeCommand.MAX_HEIGHT));
+                ResizeCommand.COMMAND_WORD
+                        + String.format(" %d %d", ResizeCommand.MAX_WIDTH, ResizeCommand.MAX_HEIGHT));
         assertEquals(new ResizeCommand(ResizeCommand.MAX_WIDTH, ResizeCommand.MAX_HEIGHT), command);
     }
 
