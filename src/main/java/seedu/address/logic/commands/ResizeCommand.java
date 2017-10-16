@@ -13,9 +13,9 @@ import seedu.address.ui.ScreenDimension;
  * Resize the main window.
  */
 public class ResizeCommand extends Command {
-    private static final Dimension dimension = ScreenDimension.getDimension();
-    public static final int MAX_WIDTH = dimension.width;
-    public static final int MAX_HEIGHT = dimension.height;
+    public static final Dimension DIMENSION = ScreenDimension.getDimension();
+    public static final int MAX_WIDTH = DIMENSION.width;
+    public static final int MAX_HEIGHT = DIMENSION.height;
     public static final String COMMAND_WORD = "resize";
     public static final String COMMAND_ALIAS = "rs";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Resize the MainWindows to "
