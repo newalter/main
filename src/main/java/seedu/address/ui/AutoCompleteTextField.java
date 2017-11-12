@@ -16,7 +16,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 /**
  * This class enables auto-completion feature as a drop down menu from the command box.
  */
-public class TabCompleteTextField extends TextField {
+public class AutoCompleteTextField extends TextField {
 
     private static final int MAX_ENTRIES = 5;
 
@@ -25,7 +25,7 @@ public class TabCompleteTextField extends TextField {
     private String prefixWords;
     private String lastWord;
 
-    public TabCompleteTextField() {
+    public AutoCompleteTextField() {
         super();
         // calls generateSuggestions() whenever there is a change to the text of the command box.
         textProperty().addListener((unused1, unused2, unused3) -> generateSuggestions());
@@ -48,7 +48,7 @@ public class TabCompleteTextField extends TextField {
 
         fillDropDown(matchedWords);
         if (!dropDownMenu.isShowing()) {
-            dropDownMenu.show(TabCompleteTextField.this, Side.BOTTOM, 0, 0);
+            dropDownMenu.show(AutoCompleteTextField.this, Side.BOTTOM, 0, 0);
         }
     }
 
