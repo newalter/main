@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class ArgumentWildcardMatcher {
      * @return A lists of string regular expression in lowercase matching the keywords.
      */
     public static List<String> processKeywords(List<String> keywords) {
+        requireNonNull(keywords);
         ArrayList<String> processedKeywords = new ArrayList<>();
         for (String keyword : keywords) {
             processedKeywords.add(keyword.toLowerCase().replace("*", "\\S*").replace("?", "\\S"));
