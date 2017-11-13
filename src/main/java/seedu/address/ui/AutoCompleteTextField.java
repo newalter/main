@@ -27,7 +27,7 @@ public class AutoCompleteTextField extends TextField {
 
     public AutoCompleteTextField() {
         super();
-        // calls generateSuggestions() whenever there is a change to the text of the command box.
+        // calls generateSuggestions() whenever there is a change to the text in the command box.
         textProperty().addListener((unused1, unused2, unused3) -> generateSuggestions());
         // hides the drop down menu when the focus changes
         focusedProperty().addListener((unused1, unused2, unused3) -> dropDownMenu.hide());
@@ -54,11 +54,11 @@ public class AutoCompleteTextField extends TextField {
 
     /**
      * Initialises suggestion heuristic for Auto-Completion from
-     * the different fields of persons from a list.
-     * @param persons a list of person
+     * a list of ReadOnlyPerson.
+     * @param persons a list of ReadOnlyPerson
      */
     public void initialiseHeuristic(List<ReadOnlyPerson> persons) {
-        heuristic.initialise(persons);
+        heuristic.extractInformation(persons);
     }
 
     /**
@@ -72,12 +72,20 @@ public class AutoCompleteTextField extends TextField {
         Iterator<String> iterator = matchedWords.iterator();
         int numEntries = Math.min(matchedWords.size(), MAX_ENTRIES);
         for (int i = 0; i < numEntries; i++) {
-            final String suggestion = prefixWords + iterator.next();
-            MenuItem item = new CustomMenuItem(new Label(suggestion), true);
-            // Complete the word with the chosen suggestion when Enter is pressed.
-            item.setOnAction((unused) -> complete(item));
-            menuItems.add(item);
+            menuItems.add(generateMenuItem(iterator.next()));
         }
+    }
+
+    /**
+     * generates a MenuItem from the given {@code matchWord}
+     * @return item a MenuItem used for auto-completion
+     */
+    private MenuItem generateMenuItem(String matchedWord) {
+        final String suggestion = prefixWords + matchedWord;
+        MenuItem item = new CustomMenuItem(new Label(suggestion), true);
+        // Complete the word with the chosen suggestion when Enter is pressed.
+        item.setOnAction((unused) -> complete(item));
+        return item;
     }
 
     /**
@@ -90,7 +98,8 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Auto-Complete with the first item in the dropDownMenu
+     * Auto-Completes with the first item in the {@code dropDownMenu}
+     * Does nothing if the {@code dropDownMenu} is not shown
      */
     public void completeFirst() {
         if (dropDownMenu.isShowing()) {
@@ -100,7 +109,7 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Auto-Complete with the given MenuItem
+     * Auto-Completes with the given MenuItem
      * @param item the MenuItem used for Auto-Complete
      */
     private void complete(MenuItem item) {
@@ -117,9 +126,9 @@ public class AutoCompleteTextField extends TextField {
         String text = getText();
         int lastSpace = text.lastIndexOf(" ");
         int lastSlash = text.lastIndexOf("/");
-        int splitingPosition = Integer.max(lastSlash, lastSpace);
-        prefixWords = text.substring(0, splitingPosition + 1);
-        lastWord = text.substring(splitingPosition + 1).toLowerCase();
+        int splittingPosition = Integer.max(lastSlash, lastSpace);
+        prefixWords = text.substring(0, splittingPosition + 1);
+        lastWord = text.substring(splittingPosition + 1).toLowerCase();
     }
 
     public ContextMenu getDropDownMenu() {

@@ -99,7 +99,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     //@@author newalter
     /**
-     * raise a new NewPersonInfoEvent whenever a person is added or edited
+     * raises a new NewPersonInfoEvent whenever a person is added or edited
      * @param person the person added or edited
      */
     private void indicateNewPersonInfoAvailable(ReadOnlyPerson person) {
