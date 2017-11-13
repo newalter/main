@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.showFirstPersonOnly;
@@ -47,12 +48,12 @@ public class SyncCommandTest {
 
     @Test
     public void check_equalPerson() {
-        showFirstPersonOnly(model);
 
         SyncCommand syncCommand = prepareCommand();
         Person aliceGoogle = prepareAliceGoogle();
 
         assertTrue(syncCommand.equalPerson(model.getFilteredPersonList().get(0), aliceGoogle));
+        assertFalse(syncCommand.equalPerson(model.getFilteredPersonList().get(1), aliceGoogle));
     }
 
     @Test
@@ -75,7 +76,7 @@ public class SyncCommandTest {
         Person aliceGoogle = prepareAliceGoogle();
         seedu.address.model.person.Person converted = syncCommand.convertGooglePerson(aliceGoogle, aliceAbc);
 
-        assertEquals(converted, aliceAbc);
+        assertEquals(aliceAbc, converted);
     }
 
     @Test
@@ -87,6 +88,7 @@ public class SyncCommandTest {
 
         assertTrue(syncCommand.getLastUpdated(aliceGoogle).equals("2017-11-12T16:29:49.398001Z"));
     }
+
 
     @Test
     public void test_linkedContact() throws Exception {
@@ -120,7 +122,50 @@ public class SyncCommandTest {
     }
 
     @Test
-    public void save_load_success() throws Exception {
+    public void test_setId_success() {
+        showFirstPersonOnly(model);
+
+        SyncCommand syncCommand = prepareCommand();
+        seedu.address.model.person.ReadOnlyPerson alice = model.getFilteredPersonList().get(0);
+        Person aliceGoogle = prepareAliceGoogle();
+
+        // We ensure that the default entry has no ID
+        assertFalse(alice.getId().getValue().equals(aliceGoogle.getResourceName()));
+
+        seedu.address.model.person.Person result = syncCommand.setId(alice, aliceGoogle.getResourceName());
+
+        // Check to see if Id was inserted
+        assertTrue(result.getId().getValue().equals(aliceGoogle.getResourceName()));
+    }
+
+    @Test
+    public void test_retrieveGName() {
+        SyncCommand syncCommand = prepareCommand();
+        Person aliceJane = prepareAliceJaneGoogle();
+
+        String result = syncCommand.retrieveFullGName(aliceJane);
+
+        assertNotEquals("Alice Pauline", result);
+
+        assertEquals("Alice Jane Pauline", result);
+    }
+
+    @Test
+    public void test_checkNullFields() {
+        SyncCommand syncCommand = prepareCommand();
+        Person alice = prepareAliceGoogle();
+        Person test = prepareAliceGoogleWithoutData();
+
+        assertFalse(alice.equals(test));
+
+        syncCommand.checkNullFields(alice, test);
+
+        assertEquals(alice, test);
+
+    }
+
+    @Test
+    public void save_load_success() {
         SyncCommand syncCommand = prepareCommand();
         HashSet<String> syncedId = new HashSet<String>();
         syncedId.add("test");
@@ -205,5 +250,57 @@ public class SyncCommandTest {
         return result;
     }
 
+    /** Prepares a Google Person with no data
+     *
+     * @return
+     */
+    private Person prepareAliceGoogleWithoutData() {
+        Person result  = new Person();
+        PersonMetadata metadata = new PersonMetadata();
+        List<Name>  name = new ArrayList<>();
+        List<Source> source = new ArrayList<>();
+
+
+        name.add(new Name().setGivenName("Alice Pauline"));
+        source.add(new Source().setUpdateTime("2017-11-12T16:29:49.398001Z"));
+        metadata.setSources(source);
+
+        result.setNames(name)
+                .setResourceName("alice")
+                .setMetadata(metadata);
+
+        return result;
+    }
+
+    /** Creates a new contact with a middle name to test retrieveFullGName
+     *
+     * @return
+     */
+    private Person prepareAliceJaneGoogle() {
+        Person result  = new Person();
+        PersonMetadata metadata = new PersonMetadata();
+        List<Name>  name = new ArrayList<>();
+        List<Address> address = new ArrayList<Address>();
+        List<EmailAddress> email = new ArrayList<>();
+        List<PhoneNumber> phone = new ArrayList<>();
+        List<Source> source = new ArrayList<>();
+
+
+        name.add(new Name().setGivenName("Alice").setMiddleName("Jane").setFamilyName("Pauline"));
+        address.add(new Address().setFormattedValue("123, Jurong West Ave 6, #08-111"));
+        email.add(new EmailAddress().setValue("alice@example.com"));
+        phone.add(new PhoneNumber().setValue("85355255"));
+        source.add(new Source().setUpdateTime("2017-11-12T16:29:49.398001Z"));
+        metadata.setSources(source);
+
+        result.setEmailAddresses(email)
+                .setNames(name)
+                .setPhoneNumbers(phone)
+                .setAddresses(address)
+                .setResourceName("alice")
+                .setMetadata(metadata);
+
+        return result;
+    }
 
 }
