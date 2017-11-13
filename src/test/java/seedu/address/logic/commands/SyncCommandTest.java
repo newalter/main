@@ -1,6 +1,9 @@
 package seedu.address.logic.commands;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.showFirstPersonOnly;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -73,7 +76,7 @@ public class SyncCommandTest {
         Person aliceGoogle = prepareAliceGoogle();
         seedu.address.model.person.Person converted = syncCommand.convertGooglePerson(aliceGoogle, aliceAbc);
 
-        assertEquals( aliceAbc, converted);
+        assertEquals(aliceAbc, converted);
     }
 
     @Test
