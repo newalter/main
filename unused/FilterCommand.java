@@ -7,6 +7,7 @@ import seedu.address.model.person.ContainsTagsPredicate;
 import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author newalter-unused
+//Unused because the functionality has been merged into Find
 /**
  * Filters the current list with persons who are tagged with any of the specified tags.
  * Tag matching is case insensitive.
