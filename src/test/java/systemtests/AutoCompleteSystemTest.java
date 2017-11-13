@@ -1,7 +1,9 @@
 package systemtests;
 
 import static seedu.address.commons.core.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
+import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.GEORGE;
 
@@ -9,13 +11,14 @@ import org.junit.Test;
 
 import javafx.scene.input.KeyCode;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 
 //@@author newalter
-public class TabCompleteSystemTest extends AddressBookSystemTest {
+public class AutoCompleteSystemTest extends AddressBookSystemTest {
 
     @Test
-    public void tab_complete() {
+    public void auto_complete() {
         /* Case: partial name in find command, TAB Pressed
          * -> 2 persons found
          */
@@ -59,11 +62,30 @@ public class TabCompleteSystemTest extends AddressBookSystemTest {
         showAllPersons();
         command = FindCommand.COMMAND_WORD + " n/Benson Da";
         expectedModel = getModel();
-        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL); // first names of Benson and Daniel are "Meier"
+        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL);
+        assertCommandSuccess(command, expectedModel, KeyCode.TAB);
+        assertSelectedCardUnchanged();
+
+        /* Case: partial tag in find command, TAB Pressed
+         * -> 2 persons found
+         */
+        showAllPersons();
+        command = FindCommand.COMMAND_WORD + " t/ow";
+        expectedModel = getModel();
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel, KeyCode.TAB);
+        assertSelectedCardUnchanged();
+
+        /* Case: partial phone in second argument, TAB Pressed
+         * -> 2 persons found
+         */
+        showAllPersons();
+        command = FindCommand.COMMAND_WORD + " n/alice p/9535";
+        expectedModel = getModel();
+        ModelHelper.setFilteredList(expectedModel, ALICE, CARL);
         assertCommandSuccess(command, expectedModel, KeyCode.TAB);
         assertSelectedCardUnchanged();
     }
-
 
     /**
      * Presses the keys {@code keyPresses} and then Executes {@code command}
