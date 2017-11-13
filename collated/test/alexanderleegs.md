@@ -147,7 +147,7 @@ public class AddTagCommandTest {
 
 
     /**
-     * Returns a {@code DeleteTagCommand} with the parameter {@code tagName}.
+     * Returns a {@code AddTagCommand} with the parameter {@code tagName}.
      */
     private AddTagCommand prepareCommand(Index index, Tag tagName) throws Exception {
         AddTagCommand addTagCommand = new AddTagCommand(index, tagName);
