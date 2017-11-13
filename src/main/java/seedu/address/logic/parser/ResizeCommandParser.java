@@ -19,7 +19,7 @@ public class ResizeCommandParser implements Parser<ResizeCommand> {
      */
     public ResizeCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
-        if (!trimmedArgs.matches("\\d+\\s\\d+")) {
+        if (!trimmedArgs.matches("\\d+\\s+\\d+")) {
             throwParserException();
         }
 
