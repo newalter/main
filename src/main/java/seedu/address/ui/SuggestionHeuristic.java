@@ -1,5 +1,7 @@
 package seedu.address.ui;
 
+import static seedu.address.logic.commands.SortCommand.SORT_FIELD_LIST;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
@@ -39,12 +41,11 @@ import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author newalter
 /**
- * This class provides the relevant suggestions for Auto-Completion in TabCompleTextField
+ * This class provides the relevant suggestions for Auto-Completion in AutoCompleteTextField
  */
 public class SuggestionHeuristic {
 
-    private final String[] sortFieldsList = {"name", "phone", "email", "address", "tag", "meeting"};
-
+    // Sorted Sets for generating different suggestions
     private SortedSet<String> empty = new TreeSet<>();
     private SortedSet<String> commands = new TreeSet<>();
     private SortedSet<String> sortFields = new TreeSet<>();
@@ -58,21 +59,20 @@ public class SuggestionHeuristic {
     public SuggestionHeuristic() {
         EventsCenter.getInstance().registerHandler(this);
         commands.addAll(CommandWordList.COMMAND_WORD_LIST);
-        sortFields.addAll(Arrays.asList(sortFieldsList));
+        sortFields.addAll(Arrays.asList(SORT_FIELD_LIST));
     }
 
     /**
-     * Generates heuristics using information of a list of person
+     * Extracts information from a list of person to generate heuristics
      * @param persons the list of person to extract information from
      */
-    public void initialise(List<ReadOnlyPerson> persons) {
+    public void extractInformation(List<ReadOnlyPerson> persons) {
         persons.forEach(this::extractInfoFromPerson);
     }
 
     /**
-     * Extracts the relevant information from a person
-     * and put them into respective heuristics
-     * @param person
+     * Extracts the relevant information from a {@code person}
+     * and put them into respective suggestion sets
      */
     private void extractInfoFromPerson(ReadOnlyPerson person) {
         names.addAll(Arrays.asList(person.getName().fullName.toLowerCase().split("\\s+")));
@@ -86,7 +86,7 @@ public class SuggestionHeuristic {
      * Generates a SortedSet containing suggestions from the inputted text
      * @param prefixWords the prefix words in the inputted text
      * @param lastWord the last (partial) word the the inputted text
-     * @return a SortedSet that contains suggestions for Auto-Completion
+     * @return a SortedSet that contains suggestions for the last word
      */
     public SortedSet<String> getSuggestions(String prefixWords, String lastWord) {
         if (lastWord.equals("")) {
