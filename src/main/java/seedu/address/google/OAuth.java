@@ -19,9 +19,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.people.v1.PeopleService;
 import com.google.api.services.people.v1.PeopleServiceScopes;
 
-import seedu.address.commons.core.EventsCenter;
-import seedu.address.model.Model;
-
 //@@author derrickchua-reused
 /**Singleton class
  *
@@ -34,7 +31,6 @@ import seedu.address.model.Model;
 public class OAuth extends Observable {
 
     private static final OAuth oauth = new OAuth();
-    private Model model;
 
     /**
      * Be sure to specify the name of your application. If the application name is {@code null} or
@@ -51,7 +47,7 @@ public class OAuth extends Observable {
 
     /** Directory to store user credentials. */
     private final java.io.File dataStoreDir =
-            new java.io.File(System.getProperty("user.home"), ".store/addressbook");
+            new java.io.File("data/");
 
     /**
      * Global instance of the {@link DataStoreFactory}. The best practice is to make it a single
@@ -67,9 +63,7 @@ public class OAuth extends Observable {
 
     private com.google.api.services.people.v1.PeopleService client;
 
-    protected void registerAsAnEventHandler(Object handler) {
-        EventsCenter.getInstance().registerHandler(handler);
-    }
+    private OAuth () { }
 
     /** Authorizes the installed application to access user's protected data. */
     private Credential authorize() throws Exception {
@@ -123,14 +117,6 @@ public class OAuth extends Observable {
         return client;
 
 
-    }
-
-    public void setModel (Model newModel) {
-        model = newModel;
-    }
-
-    public Model getModel () {
-        return model;
     }
 
     public static OAuth getInstance () {
