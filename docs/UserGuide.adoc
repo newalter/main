@@ -1,8 +1,9 @@
 = ABC Business Contacts - User Guide
 :toc:
-:toc-title:
+:toc-title: Table of Contents
 :toc-placement: preamble
 :sectnums:
+:source-highlighter: rouge
 :imagesDir: images
 :stylesDir: stylesheets
 :experimental:
@@ -27,6 +28,8 @@ Version: 1.5 +
 This User Guide introduces a detailed description of the various features that are available in *ABC*.
 Being familiar with CLI is helpful but not necessary, as this guide is simple and easy to understand. Following this guide will allow you to use *ABC* without difficulty.
 At the end of this User Guide, there is a summary of all the commands, giving you a quick overview on how to use all the features.
+
+<<<
 
 == Quick Start
 
@@ -54,6 +57,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to the link:#features[Features] section below for details of each command.
 
+<<<
+
 == Features
 
 This section aims to help you understand the features in *ABC*. It contains a detailed write up for all the commands available. At the start of every section, a box summarizing the command is provided. Here are some general guidelines on entering commands in *ABC*:
@@ -67,7 +72,7 @@ This section aims to help you understand the features in *ABC*. It contains a de
 * Items that comes before `…`​ can have multiple entries e.g. `[t/TAG]...` can be used as `{nbsp}` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 * Index refers to the index number shown in the most recent listing. The index *must be a positive integer* e.g. 1, 2, 3, ...
 // tag::tabcomplete[]
-* Suggestions will pop up for partial words keyed in. Press kbd:[TAB] to auto-complete using the first suggestion or press kbd:[&uarr;]kbd:[&darr;] arrows and kbd:[Enter] to choose the suggestion.
+* Suggestions will pop up for partial words keyed in. Press kbd:[TAB] to auto-complete using the first suggestion or press `Up` and `Down` arrow keys and kbd:[Enter] to choose the suggestion.
 // end::tabcomplete[]
 ====
 
@@ -88,6 +93,8 @@ If you want to view the *User Guide*: +
 image:help.png[help, 600] +
 _Figure 4.1.1_
 .  Press kbd:[Enter] and this *User Guide* document will show up
+
+<<<
 
 // tag::add[]
 === Adding a person: `add`
@@ -145,6 +152,8 @@ _Figure 4.3.1_
 (See Figure 4.3.2) +
 image:list2.png[list2, 600] +
 _Figure 4.3.2_
+
+<<<
 
 // tag::find[]
 === Locating persons by keywords: `find`
@@ -292,6 +301,8 @@ _Figure 4.7.2_
 Existing values will be updated to the input values
 ====
 
+<<<
+
 You can also edit contacts in a filtered list:
 
 * `>> find t/friends` +
@@ -429,6 +440,8 @@ You can also add meetings to a contact in a filtered list:
 `>> addmeeting 2 breakfast/2017-12-15 10:00` +
 Adds a meeting named `breakfast` at `2017-12-15 10:00` to the 2nd person from the result of the `find` command.
 
+<<<
+
 === Deleting a meeting : `deletemeeting`
 
 ====
@@ -563,6 +576,8 @@ _Figure 4.14.1_
 image:clear2.png[clear2, 600] +
 _Figure 4.14.2_
 
+<<<
+
 // tag::backupandrestore[]
 === Creating a backup : `backup`
 
@@ -571,6 +586,8 @@ Command Name: `backup` +
 Shorthand Alias: `b` +
 Function: Creates a backup file that stores the data in *ABC* +
 Format: `backup`
+[NOTE]
+Your data is automatically backed up every time you close *ABC*
 ====
 
 If you want to backup your data:
@@ -584,9 +601,6 @@ _Figure 4.15.1_ +
 (See Figure 4.15.2) +
 image:Backup_2.png[backup2, 600] +
 _Figure 4.15.2_ +
-
-[NOTE]
-Your data is automatically backed up every time you close *ABC*
 
 === Restoring a backup : `restore`
 
@@ -646,7 +660,7 @@ _Figure 4.17.3_
 image:login4.png[sync4, 600] +
 _Figure 4.17.4_
 
-
+<<<
 
 === Synchronising with Google Contacts : `sync`
 
@@ -703,6 +717,8 @@ image:logout2.png[logout2, 600] +
 _Figure 4.19.2_
 // end::sync[]
 
+<<<
+
 === Listing entered commands : `history`
 
 ====
@@ -711,7 +727,7 @@ Shorthand Alias: `hx` +
 Function: Lists all the commands that you have entered in reverse chronological order +
 Format: `history`
 [TIP]
-Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
+Pressing the `Up` and `Down` arrow keys will display the previous and next input respectively in the command box.
 ====
 
 If you want to view the list of commands entered: +
@@ -805,6 +821,8 @@ _Figure 4.21.10_ +
 (See Figure 4.21.11) +
 image:Undo_11.png[undo11, 600] +
 _Figure 4.21.11_ +
+
+<<<
 
 === Redoing the previously undone command : `redo`
 
@@ -916,6 +934,8 @@ _Figure 4.23.1_
 .  Press kbd:[Enter] and the main window will be resized to 1280 * 720
 // end::resize[]
 
+<<<
+
 === Exiting the program : `exit`
 
 ====
@@ -938,6 +958,8 @@ _Figure 4.24.1_ +
 
 ABC data is saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
+
+<<<
 
 == Changelog
 The changelog contains features and improvements added in different major updates of *ABC*.
@@ -968,6 +990,8 @@ The changelog contains features and improvements added in different major update
 * Restore to a backup
 * Synchronise with Google Contacts
 
+<<<
+
 == Coming in Version 2.0
 
 * Access a contact's Facebook profile
@@ -993,8 +1017,9 @@ The changelog contains features and improvements added in different major update
 will open up a new window in your default browser.
 
 *Q*: I have a question that isn't answered here. How do I get further support? +
-*A*: You can contact us by mailto:cs2103tw13b3@gmail.com[pass:[<u>email</u>]
-]. (cs2103tw13b3@gmail.com)
+*A*: You can contact us by mailto:cs2103tw13b3@gmail.com[email] ([.underline]#cs2103tw13b3@gmail.com#)
+
+<<<
 
 == Command Summary/ Cheatsheet
 
@@ -1010,7 +1035,7 @@ will open up a new window in your default browser.
 |Delete Meeting |`dm` |`deletemeeting INDEX`
 |Delete Tag |`dt` |`deletetag INDEX TAGNAME`
 |Edit |`e` | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...`
-|Exit |`q` | exit
+|Exit |`q` | `exit`
 |Find |`f` |`find [n/KEYWORD…​] [p/KEYWORD…​] [e/KEYWORD…​] [a/KEYWORD…​] [t/KEYWORD…​]`
 |Help |`hp` | `help`
 |History |`hx` | `history`
