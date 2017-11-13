@@ -44,13 +44,7 @@ public class OAuth extends Observable {
 
     private com.google.api.services.people.v1.PeopleService client;
 
-<<<<<<< HEAD
-    protected void registerAsAnEventHandler(Object handler) {
-        EventsCenter.getInstance().registerHandler(handler);
-    }
-=======
     private OAuth () { }
->>>>>>> master
 
     /** Authorizes the installed application to access user's protected data. */
     private Credential authorize() throws Exception {

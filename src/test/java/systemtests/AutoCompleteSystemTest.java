@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import javafx.scene.input.KeyCode;
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 
 //@@author newalter
@@ -67,7 +66,7 @@ public class AutoCompleteSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: partial tag in find command, TAB Pressed
-         * -> 2 persons found
+         * -> 1 person found
          */
         showAllPersons();
         command = FindCommand.COMMAND_WORD + " t/ow";
@@ -83,6 +82,22 @@ public class AutoCompleteSystemTest extends AddressBookSystemTest {
         command = FindCommand.COMMAND_WORD + " n/alice p/9535";
         expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, ALICE, CARL);
+        assertCommandSuccess(command, expectedModel, KeyCode.TAB);
+        assertSelectedCardUnchanged();
+
+        /* Case: partial email in second argument, TAB Pressed
+         * -> 2 persons found
+         */
+        showAllPersons();
+        command = FindCommand.COMMAND_WORD + " n/alice e/hei";
+        assertCommandSuccess(command, expectedModel, KeyCode.TAB);
+        assertSelectedCardUnchanged();
+
+        /* Case: partial address in second argument, TAB Pressed
+         * -> 2 persons found
+         */
+        showAllPersons();
+        command = FindCommand.COMMAND_WORD + " n/alice a/wa";
         assertCommandSuccess(command, expectedModel, KeyCode.TAB);
         assertSelectedCardUnchanged();
     }

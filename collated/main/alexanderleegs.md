@@ -368,6 +368,7 @@ public class DeleteTagCommand extends UndoableCommand {
  */
 public class SortCommand extends UndoableCommand {
 
+    public static final String[] SORT_FIELD_LIST = {"name", "phone", "email", "address", "tag", "meeting"};
     public static final String COMMAND_WORD = "sort";
     public static final String COMMAND_ALIAS = "s";
 
@@ -651,35 +652,8 @@ public class Meeting {
         this.meetingName = meetingName;
         this.displayMeetingName = new SimpleObjectProperty<>(meetingName);
         if (time == null) {
-<<<<<<< HEAD
             throw new IllegalValueException(MESSAGE_TIME_CONSTRAINTS);
         }
-        String trimmedTime = time.trim();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")
-                .withResolverStyle(ResolverStyle.STRICT);
-        try {
-            LocalDateTime date = LocalDateTime.parse(trimmedTime, formatter);
-            this.date = date;
-            value = date.format(formatter);
-            this.displayValue = new SimpleObjectProperty<>(value);
-        } catch (DateTimeParseException dtpe) {
-            throw new IllegalValueException(MESSAGE_TIME_CONSTRAINTS);
-        }
-    }
-
-    /**
-     * Overloaded constructor for creating meeting objects with no proper reference to their person object
-     */
-    public Meeting(String meetingName, String time) throws IllegalValueException {
-        this.meetingName = meetingName;
-        this.displayMeetingName = new SimpleObjectProperty<>(meetingName);
-        if (time == null) {
-            throw new IllegalValueException(MESSAGE_TIME_CONSTRAINTS);
-        }
-=======
-            throw new IllegalValueException(MESSAGE_TIME_CONSTRAINTS);
-        }
->>>>>>> master
         String trimmedTime = time.trim();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")
                 .withResolverStyle(ResolverStyle.STRICT);

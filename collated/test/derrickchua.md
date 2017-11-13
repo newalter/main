@@ -1,4 +1,22 @@
 # derrickchua
+###### \java\seedu\address\google\OAuthTest.java
+``` java
+public class OAuthTest {
+
+    @Test
+    public void ensureSingleton() {
+        OAuth instance1 = prepareOAuth();
+        OAuth instance2 = prepareOAuth();
+
+        assertTrue(instance1 == instance2);
+    }
+
+
+    public OAuth prepareOAuth() {
+        return OAuth.getInstance();
+    }
+}
+```
 ###### \java\seedu\address\logic\commands\AddCommandTest.java
 ``` java
     @Test
@@ -69,7 +87,8 @@ public class LoginCommandTest {
     private LoginCommand prepareCommand() {
         LoginCommand logincommand = new LoginCommand();
         logincommand.setData(model, new CommandHistory(), new UndoRedoStack());
-        logincommand.setExecutor(Executors.newFixedThreadPool(4));
+        logincommand.setOAuth(OAuth.getInstance());
+        logincommand.setExecutor(Executors.newSingleThreadExecutor());
         return logincommand;
     }
 
@@ -97,14 +116,8 @@ public class LogoutCommandTest {
     public void execute_addLogout_success() throws Exception {
 
         LogoutCommand logoutCommand = prepareCommand();
-<<<<<<< HEAD
-
-        java.io.File filetoDelete =
-                new java.io.File(System.getProperty("user.home"), ".store/addressbook/StoredCredential");
-=======
         java.io.File filetoDelete =
                 new java.io.File("data/StoredCredential");
->>>>>>> master
         filetoDelete.mkdirs();
         filetoDelete.createNewFile();
         String expectedMessage = String.format(LogoutCommand.MESSAGE_SUCCESS);
@@ -118,11 +131,7 @@ public class LogoutCommandTest {
         LogoutCommand logoutCommand = prepareCommand();
 
         java.io.File filetoDelete =
-<<<<<<< HEAD
-                new java.io.File(System.getProperty("user.home"), ".store/addressbook/StoredCredential");
-=======
                 new java.io.File("data/StoredCredential");
->>>>>>> master
         filetoDelete.delete();
         String expectedMessage = String.format(LogoutCommand.MESSAGE_FAILURE);
         assertCommandFailure(logoutCommand, model, expectedMessage);
@@ -152,10 +161,7 @@ public class LogoutCommandTest {
      */
     private LogoutCommand prepareCommand() {
         LogoutCommand logoutcommand = new LogoutCommand();
-<<<<<<< HEAD
-=======
         logoutcommand.setData(model, new CommandHistory(), new UndoRedoStack());
->>>>>>> master
         return logoutcommand;
     }
 
@@ -290,7 +296,7 @@ public class SyncCommandTest {
     }
 
     @Test
-    public void check_convertAPerson() {
+    public void test_convertAPerson() {
         showFirstPersonOnly(model);
 
         SyncCommand syncCommand = prepareCommand();
@@ -301,7 +307,7 @@ public class SyncCommandTest {
     }
 
     @Test
-    public void check_convertGPerson() throws Exception {
+    public void test_convertGPerson() throws Exception {
         showFirstPersonOnly(model);
 
         SyncCommand syncCommand = prepareCommand();
@@ -323,7 +329,7 @@ public class SyncCommandTest {
     }
 
     @Test
-    public void check_linkedContact() throws Exception {
+    public void test_linkedContact() throws Exception {
         showFirstPersonOnly(model);
 
         SyncCommand syncCommand = prepareCommand();
@@ -336,6 +342,48 @@ public class SyncCommandTest {
 
         assertTrue(aliceAbc.getId().getValue().equals("alice")
                 && aliceAbc.getLastUpdated().getValue().equals("2017-11-12T16:29:49.398001Z"));
+    }
+
+    @Test
+    public void test_addAContact() throws Exception {
+        SyncCommand syncCommand = prepareCommand();
+        Person aliceGoogle = prepareAliceGoogle();
+
+        // Delete Alice from address book
+        model.deletePerson(model.getFilteredPersonList().get(0));
+
+        syncCommand.addAContact(aliceGoogle);
+        seedu.address.model.person.Person aliceAbc = syncCommand.convertGooglePerson(aliceGoogle);
+        model.sort("name");
+
+        assertEquals(model.getFilteredPersonList().get(0), aliceAbc);
+    }
+
+    @Test
+    public void save_load_success() throws Exception {
+        SyncCommand syncCommand = prepareCommand();
+        HashSet<String> syncedId = new HashSet<String>();
+        syncedId.add("test");
+        syncCommand.setSyncedId(syncedId);
+        syncCommand.saveStatus(syncedId);
+        HashSet<String> expected = (HashSet<String>) syncCommand.loadStatus();
+
+        assertTrue(expected.size() == 1 && expected.contains("test"));
+    }
+
+    @Test
+    public void test_hashing() throws Exception {
+        showFirstPersonOnly(model);
+        SyncCommand syncCommand = prepareCommand();
+
+        Person alice = prepareAliceGoogle();
+        seedu.address.model.person.Person aliceAbc = syncCommand.convertGooglePerson(alice);
+        seedu.address.model.person.ReadOnlyPerson actualAlice =
+                syncCommand.getHashKey(model.getFilteredPersonList().get(0));
+
+        assertTrue(syncCommand.equalPerson(actualAlice, alice));
+        assertTrue(actualAlice.equals(aliceAbc));
+        assertEquals(aliceAbc.hashCode(), actualAlice.hashCode());
     }
 
     @Test
@@ -362,6 +410,7 @@ public class SyncCommandTest {
     private SyncCommand prepareCommand() {
         SyncCommand synccommand = new SyncCommand();
         synccommand.setData(model, new CommandHistory(), new UndoRedoStack());
+        synccommand.setSyncedId(new HashSet<String>());
         return synccommand;
     }
 

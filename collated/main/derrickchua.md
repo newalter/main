@@ -78,16 +78,6 @@ public class LogoutCommand extends Command {
 
     /** Directory to store user credentials. */
     private final java.io.File dataStoreDir =
-<<<<<<< HEAD
-            new java.io.File(System.getProperty("user.home"), ".store/addressbook/StoredCredential");
-
-    private final java.io.File syncedIDs =
-            new java.io.File("syncedIDs.dat");
-
-    @Override
-    public CommandResult execute() throws CommandException {
-        syncedIDs.delete();
-=======
             new java.io.File("data/StoredCredential");
 
     private final java.io.File syncedIDs =
@@ -104,7 +94,6 @@ public class LogoutCommand extends Command {
             assert false;
         }
 
->>>>>>> master
         if (dataStoreDir.delete()) {
             return new CommandResult(String.format(MESSAGE_SUCCESS));
         } else {
@@ -114,8 +103,6 @@ public class LogoutCommand extends Command {
 
     }
 
-<<<<<<< HEAD
-=======
     /** Removes all IDs from linked contacts
      *
      * @throws DuplicatePersonException
@@ -130,7 +117,6 @@ public class LogoutCommand extends Command {
         }
     }
 
->>>>>>> master
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
@@ -234,12 +220,12 @@ public class SyncCommand extends Command {
 
     private HashMap<String, ReadOnlyPerson> hashId;
 
-    private HashMap<String, ReadOnlyPerson> hashName;
+    private HashMap<seedu.address.model.person.Person, ReadOnlyPerson> hashAbc;
 
     private List<Person> connections;
 
     private HashMap<String, Person> hashGoogleId;
-    private HashMap<String, Person> hashGoogleName;
+    private HashMap<seedu.address.model.person.Person, Person> hashGoogle;
 
 
     @Override
@@ -285,14 +271,14 @@ public class SyncCommand extends Command {
                 .execute();
         connections = response.getConnections();
         hashId = constructHashId(personList);
-        hashName = constructHashName(personList);
+        hashAbc = constructHashAbc(personList);
 
         if (connections != null) {
             hashGoogleId = constructGoogleHashId();
-            hashGoogleName = constructGoogleHashName();
+            hashGoogle = constructHashGoogle();
         } else {
             hashGoogleId = new HashMap<String, Person>();
-            hashGoogleName = new HashMap<String, Person>();
+            hashGoogle = new HashMap<seedu.address.model.person.Person, Person>();
         }
     }
 
@@ -305,13 +291,15 @@ public class SyncCommand extends Command {
         for (ReadOnlyPerson person : personList) {
             String id = person.getId().getValue();
 
-            if (!id.equals("") && !hashGoogleId.containsKey(id)) {
-                logger.info("Deleting local contact");
-                toDelete.add(person);
-                syncedIDs.remove(id);
-                continue;
-            } else if (!id.equals("") && !syncedIDs.contains(id)) {
-                syncedIDs.add(id);
+            if (!id.equals("")) {
+                if (!hashGoogleId.containsKey(id)) {
+                    logger.info("Deleting local contact");
+                    toDelete.add(person);
+                    syncedIDs.remove(id);
+                    continue;
+                } else if (!syncedIDs.contains(id)) {
+                    syncedIDs.add(id);
+                }
             }
 
         }
@@ -330,11 +318,12 @@ public class SyncCommand extends Command {
     private void exportContacts (List<ReadOnlyPerson> personList) throws Exception {
         for (ReadOnlyPerson person : personList) {
             if (person.getId().getValue().equals("")) {
-                if (!hashGoogleName.containsKey(person.getName().fullName)) {
+                seedu.address.model.person.Person key = getHashKey(person);
+                if (!hashGoogle.containsKey(key)) {
                     addGoogleContact(person);
                 } else {
                     // We check if the person is identical, and link them if they are
-                    Person gPerson = hashGoogleName.get(person.getName().fullName);
+                    Person gPerson = hashGoogle.get(key);
                     if (equalPerson(person, gPerson)) {
                         linkContacts(person, gPerson);
                     } else {
@@ -352,17 +341,16 @@ public class SyncCommand extends Command {
 
         for (Person person : connections) {
             try {
-<<<<<<< HEAD
-
-=======
->>>>>>> master
                 String id = person.getResourceName();
-                String gName = retrieveFullGName(person);
                 if (!syncedIDs.contains(id)) {
-                    if (!hashName.containsKey(gName)) {
+                    seedu.address.model.person.Person key = convertGooglePerson(person);
+                    if (key == null) {
+                        continue;
+                    }
+                    if (!hashAbc.containsKey(key)) {
                         addAContact(person);
                     } else {
-                        seedu.address.model.person.ReadOnlyPerson aPerson = hashName.get(gName);
+                        seedu.address.model.person.ReadOnlyPerson aPerson = hashAbc.get(key);
                         if (equalPerson(aPerson, person)) {
                             linkContacts(aPerson, person);
                         } else {
@@ -405,10 +393,7 @@ public class SyncCommand extends Command {
                 // Contact is no longer existent on Google servers
                 seedu.address.model.person.Person updatedPerson = setId(aPerson, "");
                 updatePerson(aPerson, updatedPerson);
-<<<<<<< HEAD
-=======
                 logger.info("Removing id: " + id);
->>>>>>> master
                 toRemove.add(id);
                 continue;
             }
@@ -438,7 +423,6 @@ public class SyncCommand extends Command {
                 model.updatePerson(aPerson, updatedAPerson);
 
             } else if (compare > 0) {
-
                 // The local contact is updated
                 seedu.address.model.person.Person updatedPerson = convertGooglePerson(person, aPerson);
                 model.updatePerson(aPerson, updatedPerson);
@@ -454,11 +438,7 @@ public class SyncCommand extends Command {
      * @param gPerson
      * @throws Exception
      */
-<<<<<<< HEAD
-    private void linkContacts(ReadOnlyPerson aPerson, Person gPerson) throws Exception {
-=======
     protected void linkContacts(ReadOnlyPerson aPerson, Person gPerson) throws Exception {
->>>>>>> master
         seedu.address.model.person.Person updatedPerson =
                 new seedu.address.model.person.Person(aPerson);
         updatedPerson.setId(new Id(gPerson.getResourceName()));
@@ -475,11 +455,7 @@ public class SyncCommand extends Command {
      * @param person
      * @throws Exception
      */
-<<<<<<< HEAD
-    private void addGoogleContact (ReadOnlyPerson person) throws Exception {
-=======
     protected void addGoogleContact (ReadOnlyPerson person) throws Exception {
->>>>>>> master
         Person contactToCreate = convertAPerson(person);
         Person createdContact = client.people().createContact(contactToCreate).execute();
 
@@ -497,15 +473,14 @@ public class SyncCommand extends Command {
      * @param person
      * @throws Exception
      */
-<<<<<<< HEAD
-    private void addAContact (Person person) throws Exception {
-=======
     protected void addAContact (Person person) throws Exception {
->>>>>>> master
         String id = person.getResourceName();
         seedu.address.model.person.Person convertedAPerson = convertGooglePerson(person);
-        model.addPerson(convertedAPerson);
-        syncedIDs.add(id);
+        if (convertedAPerson != null) {
+            model.addPerson(convertedAPerson);
+            syncedIDs.add(id);
+        }
+
     }
 
     /**Ensures that we do not override a Google Contact with null fields when updating
@@ -552,6 +527,7 @@ public class SyncCommand extends Command {
 
         if (name == null) {
             logger.warning("Google Contact has no retrievable name");
+            return null;
         } else {
             seedu.address.model.person.Name aName = new seedu.address.model.person.Name(retrieveFullGName(person));
             Phone aPhone = (phone == null || !Phone.isValidPhone(phone.getValue().replaceAll("\\s+", "")))
@@ -580,11 +556,7 @@ public class SyncCommand extends Command {
      * @throws IllegalValueException
      */
 
-<<<<<<< HEAD
-    private seedu.address.model.person.Person convertGooglePerson (Person person, ReadOnlyPerson aOldPerson)
-=======
     protected seedu.address.model.person.Person convertGooglePerson (Person person, ReadOnlyPerson aOldPerson)
->>>>>>> master
             throws IllegalValueException {
         seedu.address.model.person.Person aPerson = null;
 
@@ -605,28 +577,26 @@ public class SyncCommand extends Command {
 
         if (name == null) {
             logger.warning("Google Contact has no retrievable name");
-        } else {
-            seedu.address.model.person.Name aName = new seedu.address.model.person.Name(retrieveFullGName(person));
-            Phone aPhone = (phone == null || !Phone.isValidPhone(phone.getValue().replaceAll("\\s+", "")))
-                    ? new Phone(null)
-                    : new seedu.address.model.person.Phone(phone.getValue().replaceAll("\\s+", ""));
-            seedu.address.model.person.Address aAddress = (
-<<<<<<< HEAD
-                    address == null || !seedu.address.model.person.Address.isValidAddress(address.getStreetAddress()))
-                    ? new seedu.address.model.person.Address(null)
-                    : new seedu.address.model.person.Address(address.getStreetAddress());
-=======
-                    address == null || !seedu.address.model.person.Address.isValidAddress(address.getFormattedValue()))
-                    ? new seedu.address.model.person.Address(null)
-                    : new seedu.address.model.person.Address(address.getFormattedValue());
->>>>>>> master
-            Email aEmail = (email == null || !Email.isValidEmail(email.getValue()))
-                    ? new Email(null)
-                    : new Email(email.getValue());
-            aPerson = new seedu.address.model.person.Person(aName, aPhone, aEmail, aAddress,
-                    aOldPerson.getNote(), new Id(id), new LastUpdated(lastUpdated),
-                    aOldPerson.getTags(), aOldPerson.getMeetings());
         }
+
+        seedu.address.model.person.Name aName = (name == null
+                || !seedu.address.model.person.Name.isValidName(retrieveFullGName(person))
+                ? aOldPerson.getName()
+                : new seedu.address.model.person.Name(retrieveFullGName(person)));
+        Phone aPhone = (phone == null || !Phone.isValidPhone(phone.getValue().replaceAll("\\s+", "")))
+                ? new Phone(null)
+                : new seedu.address.model.person.Phone(phone.getValue().replaceAll("\\s+", ""));
+        seedu.address.model.person.Address aAddress = (
+                address == null || !seedu.address.model.person.Address.isValidAddress(address.getFormattedValue()))
+                ? new seedu.address.model.person.Address(null)
+                : new seedu.address.model.person.Address(address.getFormattedValue());
+        Email aEmail = (email == null || !Email.isValidEmail(email.getValue()))
+                ? new Email(null)
+                : new Email(email.getValue());
+        aPerson = new seedu.address.model.person.Person(aName, aPhone, aEmail, aAddress,
+                aOldPerson.getNote(), new Id(id), new LastUpdated(lastUpdated),
+                aOldPerson.getTags(), aOldPerson.getMeetings());
+
 
         return aPerson;
     }
@@ -670,11 +640,7 @@ public class SyncCommand extends Command {
      * @param person
      * @param updatedPerson
      */
-<<<<<<< HEAD
-    private void updatePerson (ReadOnlyPerson person, seedu.address.model.person.Person updatedPerson) {
-=======
     protected void updatePerson (ReadOnlyPerson person, seedu.address.model.person.Person updatedPerson) {
->>>>>>> master
         try {
             model.updatePerson(person, updatedPerson);
         } catch (Exception e) {
@@ -688,11 +654,7 @@ public class SyncCommand extends Command {
      * @param person
      * @return
      */
-<<<<<<< HEAD
-    private String retrieveFullGName (Person person) {
-=======
     protected String retrieveFullGName (Person person) {
->>>>>>> master
         Name name = person.getNames().get(0);
 
         String result;
@@ -749,24 +711,40 @@ public class SyncCommand extends Command {
         return result;
     }
 
-    /**Constructs a HashMap of a Person's Name and itself
+    /**Constructs a HashMap of a Person with synchronised fields and itself
      *
      * @param personList
      * @return
      */
 
-<<<<<<< HEAD
-    private HashMap<String, ReadOnlyPerson> constructHashName (List<ReadOnlyPerson> personList) {
-=======
-    protected HashMap<String, ReadOnlyPerson> constructHashName (List<ReadOnlyPerson> personList) {
->>>>>>> master
-        HashMap<String, ReadOnlyPerson> result = new HashMap<>();
+    protected HashMap<seedu.address.model.person.Person, ReadOnlyPerson> constructHashAbc(
+            List<ReadOnlyPerson> personList) {
+        HashMap<seedu.address.model.person.Person, ReadOnlyPerson> result = new HashMap<>();
 
         personList.forEach(e -> {
-            result.put(e.getName().fullName, e);
+            try {
+                seedu.address.model.person.Person key = getHashKey(e);
+                result.put(key, e);
+            } catch (Exception ex) {
+                logger.severe("Hashing error in constructHashAbc");
+            }
         });
 
         return result;
+    }
+
+    /**Constructs a key for a provided ReadOnlyPerson that is comparable to a Google person
+     *
+     * @param person
+     * @return
+     * @throws Exception
+     */
+    protected seedu.address.model.person.Person getHashKey(ReadOnlyPerson person) throws Exception {
+        seedu.address.model.person.Person key = new seedu.address.model.person.Person(
+                person.getName(), person.getPhone(), person.getEmail(), person.getAddress(),
+                new Note(""), person.getId(), new LastUpdated(Instant.now().toString()),
+                new HashSet<Tag>(), new HashSet<Meeting>());
+        return key;
     }
 
 
@@ -790,35 +768,20 @@ public class SyncCommand extends Command {
      * @return Hashmap
      */
 
-<<<<<<< HEAD
-    private HashMap<String, Person> constructGoogleHashName () {
-=======
-    protected HashMap<String, Person> constructGoogleHashName () {
->>>>>>> master
-        HashMap<String, Person> result = new HashMap<>();
+    protected HashMap<seedu.address.model.person.Person, Person> constructHashGoogle () {
+        HashMap<seedu.address.model.person.Person, Person> result = new HashMap<>();
 
         connections.forEach(e -> {
-            String name = retrieveFullGName(e);
-<<<<<<< HEAD
-            result.put(name, e);
-
-        });
-
-=======
-            if (!result.containsKey(name)) {
-                result.put(name, e);
-            } else {
-                if (hashName.containsKey(name)) {
-                    ReadOnlyPerson person = hashName.get(name);
-                    if (equalPerson(person, e)) {
-                        result.put(name, e);
-                    }
+            try {
+                seedu.address.model.person.Person key = convertGooglePerson(e);
+                if (key != null) {
+                    result.put(key, e);
                 }
+            } catch (Exception ex) {
+                logger.severe("Error in constructHashGoogle");
             }
-
         });
 
->>>>>>> master
         return result;
     }
 
@@ -862,11 +825,7 @@ public class SyncCommand extends Command {
      * @param gPerson
      * @return
      */
-<<<<<<< HEAD
-    private boolean equalPerson (ReadOnlyPerson abcPerson, Person gPerson) {
-=======
     protected boolean equalPerson (ReadOnlyPerson abcPerson, Person gPerson) {
->>>>>>> master
         Name name = (gPerson.getNames() == null)
                 ? null
                 : gPerson.getNames().get(0);
@@ -896,11 +855,7 @@ public class SyncCommand extends Command {
                 ? null
                 : gPerson.getPhoneNumbers().get(0);
         String abcPhone = abcPerson.getPhone().value;
-<<<<<<< HEAD
-        String gPhone;
-=======
         String gPhone = null;
->>>>>>> master
         boolean equalPhone;
 
         if (phone != null) {
@@ -918,17 +873,21 @@ public class SyncCommand extends Command {
         boolean equalAddress;
 
         if (address != null) {
-<<<<<<< HEAD
-            gAddress = address.getStreetAddress();
-=======
             gAddress = address.getFormattedValue();
->>>>>>> master
             equalAddress = gAddress.equals(abcAddress);
         } else {
             equalAddress = abcAddress.equals("No Address");
         }
 
         return equalName && equalPhone && equalAddress && equalEmail;
+    }
+
+    /**Used for tests
+     *
+     * @param syncedId
+     */
+    protected void setSyncedId (HashSet<String> syncedId) {
+        syncedIDs = syncedId;
     }
 
     @Override
