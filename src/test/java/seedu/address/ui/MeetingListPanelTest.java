@@ -1,6 +1,8 @@
 package seedu.address.ui;
 
 import static org.junit.Assert.assertEquals;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalPersons;
 import static seedu.address.ui.testutil.GuiTestAssert.assertCardDisplaysMeeting;
 
@@ -36,9 +38,9 @@ public class MeetingListPanelTest extends GuiUnitTest {
         typicalPersons = getTypicalPersons();
         meetingList = new ArrayList<>();
 
-        Person firstPerson = (Person) typicalPersons.get(1);
+        Person firstPerson = (Person) typicalPersons.get(INDEX_FIRST_PERSON.getZeroBased());
         addMeetingToPerson(firstPerson, "Dinner", "2017-12-29 18:00");
-        Person secondPerson = (Person) typicalPersons.get(2);
+        Person secondPerson = (Person) typicalPersons.get(INDEX_SECOND_PERSON.getZeroBased());
         addMeetingToPerson(secondPerson, "Dinner", "2017-12-30 18:00");
 
         observableMeetingList = FXCollections.observableList(meetingList);
