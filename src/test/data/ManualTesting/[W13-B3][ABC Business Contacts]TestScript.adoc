@@ -15,7 +15,7 @@ Sync
 |S3 |sync | Google Contacts will be updated with local contacts (Only after S2 is completed)
 |S4 |Disable your wifi-connection and run sync | Error message: “Unable to connect to the Internet. Please check your internet and firewall settings
 ”
-|S5 |logout | Error message: “Logged out!”
+|S5 |Enable wifi and logout | Error message: “Logged out!”
 |S6 |sync | Error message: “Please login first”
 |S7 |logout | Error message: “Failure logging out. Are you sure you are logged in?”
 |S8 |login | Browser window opens for Google login (Please complete your login)
@@ -85,7 +85,7 @@ Organization
 |O3 |Press kbd:[tab] | The command would be completed with `find t/friend`
 |O4 |Press kdb:[enter] | 9 persons listed!
 |O5 |list | Listed all persons
-|O6 |fnd t/friend family | 11 persons listed!
+|O6 |find t/friend family | 11 persons listed!
 |O7 |list | Listed all persons
 |O8 |find t/friend family p/81427313 | 12 persons listed!
 |O9 |f e/*@example.com | 9 persons listed!
@@ -193,7 +193,7 @@ resize: Resize the MainWindows to the specified (300<=)WIDTH(<=1920) and (230<=)
 |Z17 |sync |”Synchronised” message, and Mary Brown should appear
 |Z18 |e 1 p/91234567 | “Edited Person: Abraham Lionel Phone: 91234567 Email: abraham@lionel.com Address: No Address Note: Has 3 children Tags: [colleagues][friend][male] Meetings: [2017-11-20 11:00][2017-11-30 13:00][2017-12-20 11:00]”
 |Z19 |sync | “Synchronised” and Google Contact should now have Phone Number: 91234567 for Abraham Lionel
-|Z20 |Remove Abraham Lionel’s phone number | Abraham Lionel’s Google Contact phone number should be blank
+|Z20 |Remove Abraham Lionel’s phone number in Google Contacts | Abraham Lionel’s Google Contact phone number should be blank
 |Z21 |sync | “Synchronised” and Abraham Lionel’s phone number is now blank in ABC
 |Z22 |delete 1| Deleted Person: Abraham Lionel Phone: No Phone Number Email: abraham@lionel.com Address: No Address Note: Has 3 children Tags: [colleagues][friend][male] Meetings: [2017-11-20 11:00][2017-11-30 13:00][2017-12-20 11:00]
 |Z23 |sync | “Synchronised” and Abraham Lionel should no longer appear in Google Contacts
