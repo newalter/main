@@ -11,7 +11,7 @@ public interface XmlAdaptedClass<E> {
 
     /**
      * Converts the jaxb-friendly adapted object into the corresponding object in model.
-     * @throws IllegalValueException if there were any data constraints violated
+     * @throws IllegalValueException if there was any data constraint violated
      */
     public E toModelType() throws IllegalValueException;
 

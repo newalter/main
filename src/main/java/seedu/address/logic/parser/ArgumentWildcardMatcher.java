@@ -7,16 +7,14 @@ import java.util.List;
 
 //@@author newalter
 /**
- * Convert a list of string of unprocessed keywords with wildcard symbol "*" and "?"
+ * Converts a list of string of unprocessed keywords with wildcard symbol "*" and "?"
  * into a list of lowercase regular expression matching the keywords.
  */
 public class ArgumentWildcardMatcher {
 
     /**
-     * Convert a list of keywords with wildcard symbol "*" and "?"
+     * Converts a list of {@code keywords} with wildcard symbol "*" and "?"
      * into a list of lowercase regular expression matching the keywords.
-     * @param keywords List of String containing unprocessed keywords
-     * @return A lists of string regular expression in lowercase matching the keywords.
      */
     public static List<String> processKeywords(List<String> keywords) {
         requireNonNull(keywords);

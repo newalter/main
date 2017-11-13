@@ -8,6 +8,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
  */
 public class SortCommand extends UndoableCommand {
 
+    public static final String[] SORT_FIELD_LIST = {"name", "phone", "email", "address", "tag", "meeting"};
     public static final String COMMAND_WORD = "sort";
     public static final String COMMAND_ALIAS = "s";
 

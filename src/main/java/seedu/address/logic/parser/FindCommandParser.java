@@ -40,7 +40,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, searchFields);
         if (!isAnyPrefixPresent(argMultimap, searchFields)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            return throwParserException();
         }
 
         ArrayList<Predicate<ReadOnlyPerson>> predicates = new ArrayList<>();
@@ -73,6 +73,10 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         return new FindCommand(predicates);
+    }
+
+    private FindCommand throwParserException() throws ParseException {
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     /**

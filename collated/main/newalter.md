@@ -46,7 +46,7 @@ public class ResizeMainWindowEvent extends BaseEvent {
 
     @Override
     public String toString() {
-        return null;
+        return String.format("resize main window to %d * %d", width, height);
     }
 }
 ```
@@ -98,6 +98,8 @@ public class CommandWordList {
 
     @Override
     public CommandResult execute() {
+        requireNonNull(model);
+
         Predicate<ReadOnlyPerson> predicate = combinePredicates();
 
         Predicate<? super ReadOnlyPerson>  currentPredicate = model.getPersonListPredicate();
@@ -125,7 +127,7 @@ public class CommandWordList {
 ###### \java\seedu\address\logic\commands\ResizeCommand.java
 ``` java
 /**
- * Resize the main window.
+ * Resizes the main window.
  */
 public class ResizeCommand extends Command {
     public static final Dimension DIMENSION = ScreenDimension.getDimension();
@@ -171,16 +173,14 @@ public class ResizeCommand extends Command {
 ###### \java\seedu\address\logic\parser\ArgumentWildcardMatcher.java
 ``` java
 /**
- * Convert a list of string of unprocessed keywords with wildcard symbol "*" and "?"
+ * Converts a list of string of unprocessed keywords with wildcard symbol "*" and "?"
  * into a list of lowercase regular expression matching the keywords.
  */
 public class ArgumentWildcardMatcher {
 
     /**
-     * Convert a list of keywords with wildcard symbol "*" and "?"
+     * Converts a list of {@code keywords} with wildcard symbol "*" and "?"
      * into a list of lowercase regular expression matching the keywords.
-     * @param keywords List of String containing unprocessed keywords
-     * @return A lists of string regular expression in lowercase matching the keywords.
      */
     public static List<String> processKeywords(List<String> keywords) {
         requireNonNull(keywords);
@@ -210,7 +210,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, searchFields);
         if (!isAnyPrefixPresent(argMultimap, searchFields)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            return throwParserException();
         }
 
         ArrayList<Predicate<ReadOnlyPerson>> predicates = new ArrayList<>();
@@ -243,6 +243,10 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         return new FindCommand(predicates);
+    }
+
+    private FindCommand throwParserException() throws ParseException {
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     /**
@@ -306,7 +310,7 @@ public class ResizeCommandParser implements Parser<ResizeCommand> {
 ###### \java\seedu\address\model\ModelManager.java
 ``` java
     /**
-     * raise a new NewPersonInfoEvent whenever a person is added or edited
+     * raises a new NewPersonInfoEvent whenever a person is added or edited
      * @param person the person added or edited
      */
     private void indicateNewPersonInfoAvailable(ReadOnlyPerson person) {
@@ -315,6 +319,7 @@ public class ResizeCommandParser implements Parser<ResizeCommand> {
 ```
 ###### \java\seedu\address\model\person\Name.java
 ``` java
+        //prevents the app from crashing on corrupted xml data
         if (name == null) {
             throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
         }
@@ -473,7 +478,7 @@ public interface XmlAdaptedClass<E> {
 
     /**
      * Converts the jaxb-friendly adapted object into the corresponding object in model.
-     * @throws IllegalValueException if there were any data constraints violated
+     * @throws IllegalValueException if there was any data constraint violated
      */
     public E toModelType() throws IllegalValueException;
 
@@ -532,7 +537,7 @@ public class AutoCompleteTextField extends TextField {
 
     public AutoCompleteTextField() {
         super();
-        // calls generateSuggestions() whenever there is a change to the text of the command box.
+        // calls generateSuggestions() whenever there is a change to the text in the command box.
         textProperty().addListener((unused1, unused2, unused3) -> generateSuggestions());
         // hides the drop down menu when the focus changes
         focusedProperty().addListener((unused1, unused2, unused3) -> dropDownMenu.hide());
@@ -559,11 +564,11 @@ public class AutoCompleteTextField extends TextField {
 
     /**
      * Initialises suggestion heuristic for Auto-Completion from
-     * the different fields of persons from a list.
-     * @param persons a list of person
+     * a list of ReadOnlyPerson.
+     * @param persons a list of ReadOnlyPerson
      */
     public void initialiseHeuristic(List<ReadOnlyPerson> persons) {
-        heuristic.initialise(persons);
+        heuristic.extractInformation(persons);
     }
 
     /**
@@ -577,12 +582,20 @@ public class AutoCompleteTextField extends TextField {
         Iterator<String> iterator = matchedWords.iterator();
         int numEntries = Math.min(matchedWords.size(), MAX_ENTRIES);
         for (int i = 0; i < numEntries; i++) {
-            final String suggestion = prefixWords + iterator.next();
-            MenuItem item = new CustomMenuItem(new Label(suggestion), true);
-            // Complete the word with the chosen suggestion when Enter is pressed.
-            item.setOnAction((unused) -> complete(item));
-            menuItems.add(item);
+            menuItems.add(generateMenuItem(iterator.next()));
         }
+    }
+
+    /**
+     * generates a MenuItem from the given {@code matchWord}
+     * @return item a MenuItem used for auto-completion
+     */
+    private MenuItem generateMenuItem(String matchedWord) {
+        final String suggestion = prefixWords + matchedWord;
+        MenuItem item = new CustomMenuItem(new Label(suggestion), true);
+        // Complete the word with the chosen suggestion when Enter is pressed.
+        item.setOnAction((unused) -> complete(item));
+        return item;
     }
 
     /**
@@ -595,7 +608,8 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Auto-Complete with the first item in the dropDownMenu
+     * Auto-Completes with the first item in the {@code dropDownMenu}
+     * Does nothing if the {@code dropDownMenu} is not shown
      */
     public void completeFirst() {
         if (dropDownMenu.isShowing()) {
@@ -605,7 +619,7 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Auto-Complete with the given MenuItem
+     * Auto-Completes with the given MenuItem
      * @param item the MenuItem used for Auto-Complete
      */
     private void complete(MenuItem item) {
@@ -622,9 +636,9 @@ public class AutoCompleteTextField extends TextField {
         String text = getText();
         int lastSpace = text.lastIndexOf(" ");
         int lastSlash = text.lastIndexOf("/");
-        int splitingPosition = Integer.max(lastSlash, lastSpace);
-        prefixWords = text.substring(0, splitingPosition + 1);
-        lastWord = text.substring(splitingPosition + 1).toLowerCase();
+        int splittingPosition = Integer.max(lastSlash, lastSpace);
+        prefixWords = text.substring(0, splittingPosition + 1);
+        lastWord = text.substring(splittingPosition + 1).toLowerCase();
     }
 
     public ContextMenu getDropDownMenu() {
@@ -675,12 +689,11 @@ public class ScreenDimension {
 ###### \java\seedu\address\ui\SuggestionHeuristic.java
 ``` java
 /**
- * This class provides the relevant suggestions for Auto-Completion in TabCompleTextField
+ * This class provides the relevant suggestions for Auto-Completion in AutoCompleteTextField
  */
 public class SuggestionHeuristic {
 
-    private final String[] sortFieldsList = {"name", "phone", "email", "address", "tag", "meeting"};
-
+    // Sorted Sets for generating different suggestions
     private SortedSet<String> empty = new TreeSet<>();
     private SortedSet<String> commands = new TreeSet<>();
     private SortedSet<String> sortFields = new TreeSet<>();
@@ -694,21 +707,20 @@ public class SuggestionHeuristic {
     public SuggestionHeuristic() {
         EventsCenter.getInstance().registerHandler(this);
         commands.addAll(CommandWordList.COMMAND_WORD_LIST);
-        sortFields.addAll(Arrays.asList(sortFieldsList));
+        sortFields.addAll(Arrays.asList(SORT_FIELD_LIST));
     }
 
     /**
-     * Generates heuristics using information of a list of person
+     * Extracts information from a list of person to generate heuristics
      * @param persons the list of person to extract information from
      */
-    public void initialise(List<ReadOnlyPerson> persons) {
+    public void extractInformation(List<ReadOnlyPerson> persons) {
         persons.forEach(this::extractInfoFromPerson);
     }
 
     /**
-     * Extracts the relevant information from a person
-     * and put them into respective heuristics
-     * @param person
+     * Extracts the relevant information from a {@code person}
+     * and put them into respective suggestion sets
      */
     private void extractInfoFromPerson(ReadOnlyPerson person) {
         names.addAll(Arrays.asList(person.getName().fullName.toLowerCase().split("\\s+")));
@@ -722,7 +734,7 @@ public class SuggestionHeuristic {
      * Generates a SortedSet containing suggestions from the inputted text
      * @param prefixWords the prefix words in the inputted text
      * @param lastWord the last (partial) word the the inputted text
-     * @return a SortedSet that contains suggestions for Auto-Completion
+     * @return a SortedSet that contains suggestions for the last word
      */
     public SortedSet<String> getSuggestions(String prefixWords, String lastWord) {
         if (lastWord.equals("")) {

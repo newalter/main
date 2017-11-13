@@ -26,6 +26,6 @@ public class ResizeMainWindowEvent extends BaseEvent {
 
     @Override
     public String toString() {
-        return null;
+        return String.format("resize main window to %d * %d", width, height);
     }
 }

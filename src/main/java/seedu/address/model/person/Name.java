@@ -27,6 +27,7 @@ public class Name {
     public Name(String name) throws IllegalValueException {
 
         //@@author newalter
+        //prevents the app from crashing on corrupted xml data
         if (name == null) {
             throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
         }

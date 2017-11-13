@@ -12,7 +12,7 @@ import seedu.address.ui.ScreenDimension;
 
 //@@author newalter
 /**
- * Resize the main window.
+ * Resizes the main window.
  */
 public class ResizeCommand extends Command {
     public static final Dimension DIMENSION = ScreenDimension.getDimension();
