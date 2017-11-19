@@ -39,6 +39,7 @@ public class AutoCompleteTextField extends TextField {
      * Hides the menu otherwise.
      */
     private void generateSuggestions() {
+        //@@author newalter-reuse
         splitWords();
         SortedSet<String> matchedWords = heuristic.getSuggestions(prefixWords, lastWord);
         if (matchedWords.size() <= 0) {
@@ -50,6 +51,7 @@ public class AutoCompleteTextField extends TextField {
         if (!dropDownMenu.isShowing()) {
             dropDownMenu.show(AutoCompleteTextField.this, Side.BOTTOM, 0, 0);
         }
+        //@@author newalter
     }
 
     /**
@@ -66,6 +68,7 @@ public class AutoCompleteTextField extends TextField {
      * @param matchedWords The list of matched words.
      */
     private void fillDropDown(SortedSet<String> matchedWords) {
+        //@@author newalter-reuse
         List<MenuItem> menuItems = dropDownMenu.getItems();
         menuItems.clear();
 
@@ -74,6 +77,7 @@ public class AutoCompleteTextField extends TextField {
         for (int i = 0; i < numEntries; i++) {
             menuItems.add(generateMenuItem(iterator.next()));
         }
+        //@@author newalter
     }
 
     /**
@@ -81,11 +85,13 @@ public class AutoCompleteTextField extends TextField {
      * @return item a MenuItem used for auto-completion
      */
     private MenuItem generateMenuItem(String matchedWord) {
+        //@@author newalter-reuse
         final String suggestion = prefixWords + matchedWord;
         MenuItem item = new CustomMenuItem(new Label(suggestion), true);
         // Complete the word with the chosen suggestion when Enter is pressed.
         item.setOnAction((unused) -> complete(item));
         return item;
+        //@@author newalter
     }
 
     /**

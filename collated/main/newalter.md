@@ -549,17 +549,9 @@ public class AutoCompleteTextField extends TextField {
      * Hides the menu otherwise.
      */
     private void generateSuggestions() {
-        splitWords();
-        SortedSet<String> matchedWords = heuristic.getSuggestions(prefixWords, lastWord);
-        if (matchedWords.size() <= 0) {
-            dropDownMenu.hide();
-            return;
-        }
-
-        fillDropDown(matchedWords);
-        if (!dropDownMenu.isShowing()) {
-            dropDownMenu.show(AutoCompleteTextField.this, Side.BOTTOM, 0, 0);
-        }
+```
+###### \java\seedu\address\ui\AutoCompleteTextField.java
+``` java
     }
 
     /**
@@ -576,14 +568,9 @@ public class AutoCompleteTextField extends TextField {
      * @param matchedWords The list of matched words.
      */
     private void fillDropDown(SortedSet<String> matchedWords) {
-        List<MenuItem> menuItems = dropDownMenu.getItems();
-        menuItems.clear();
-
-        Iterator<String> iterator = matchedWords.iterator();
-        int numEntries = Math.min(matchedWords.size(), MAX_ENTRIES);
-        for (int i = 0; i < numEntries; i++) {
-            menuItems.add(generateMenuItem(iterator.next()));
-        }
+```
+###### \java\seedu\address\ui\AutoCompleteTextField.java
+``` java
     }
 
     /**
@@ -591,11 +578,9 @@ public class AutoCompleteTextField extends TextField {
      * @return item a MenuItem used for auto-completion
      */
     private MenuItem generateMenuItem(String matchedWord) {
-        final String suggestion = prefixWords + matchedWord;
-        MenuItem item = new CustomMenuItem(new Label(suggestion), true);
-        // Complete the word with the chosen suggestion when Enter is pressed.
-        item.setOnAction((unused) -> complete(item));
-        return item;
+```
+###### \java\seedu\address\ui\AutoCompleteTextField.java
+``` java
     }
 
     /**
